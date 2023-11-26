@@ -1,0 +1,77 @@
+#include<bits/stdc++.h>
+#define int long long //CF题必备
+using namespace std;
+inline int read();
+inline void write(long long n);
+inline string str_read();
+inline void str_write(string a);
+void slove();
+const int MAX=2e5+7;
+int n,a[MAX],ans;
+map<int,int>dls[6];
+pair<int,int>ktr(int a){
+	int sum=0,dk=0;
+	while(a){
+		sum+=a%10;
+		a/=10;
+		dk++;
+	}
+	return make_pair(sum,dk);
+}
+int get_k(int x,int s){
+	for(int i=1;i<s;i++)x/=10;
+	return x%10;
+}
+signed main(){
+	slove();
+	return 0;
+}
+void slove(){
+	n=read();
+	for(int i=1;i<=n;i++)a[i]=read();
+	sort(a+1,a+n+1);
+	for(int i=1;i<=n;i++){
+		pair<int,int>t1=ktr(a[i]);
+		switch(t1.second){
+		case 1:
+			ans+=dls[1][t1.first]*2;
+			break;
+		case 2:
+			ans+=dls[2][t1.first]*2;
+			break;
+		case 3:
+			ans+=dls[3][t1.first]*2;
+			ans+=dls[1][t1.first-get_k(a[i],1)*2];
+			ans+=dls[1][t1.first-get_k(a[i],3)*2];
+			break;
+		case 4:
+			ans+=dls[4][t1.first]*2;
+			ans+=dls[2][t1.first-get_k(a[i],1)*2];
+			ans+=dls[2][t1.first-get_k(a[i],4)*2];
+			break;
+		case 5:
+			ans+=dls[5][t1.first]*2;
+			ans+=dls[3][t1.first-get_k(a[i],1)*2];
+			ans+=dls[3][t1.first-get_k(a[i],5)*2];
+			ans+=dls[1][t1.first-get_k(a[i],1)*2-get_k(a[i],2)*2];
+			ans+=dls[1][t1.first-get_k(a[i],4)*2-get_k(a[i],5)*2];
+			break;
+		}
+		dls[t1.second][t1.first]++;
+		ans++;
+	}
+	write(ans);
+	return ;
+}
+inline int read(){
+	int s=0,w=1;
+	char ch=getchar();
+	while(ch<'0'||ch>'9'){if(ch=='-')w=-1;ch=getchar();}
+	while(ch>='0'&&ch<='9') s=s*10+ch-'0',ch=getchar();
+	return s*w;
+}
+inline void write(long long n){
+	if(n<0){putchar('-');n=-n;}
+	if(n>9){write(n/10);}
+	putchar(n%10+'0');
+}
